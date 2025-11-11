@@ -1,0 +1,126 @@
+[Actions]
+
+# Enable delegated authentication for the instance
+
+ModifySystem:Name=SYSTEM,AutheEnabled=33564655
+
+
+
+# Create resources for COMPONENT_NAMESPACE
+
+CreateResource:Name=%DB_<COMPONENT_NAMESPACE>-SOURCE,Description=The <COMPONENT_NAMESPACE>-SOURCE database
+
+CreateResource:Name=%DB_<COMPONENT_NAMESPACE>-DATA,Description=The <COMPONENT_NAMESPACE>-DATA database
+
+CreateResource:Name=%DB_<COMPONENT_NAMESPACE>,Description=<COMPONENT_NAMESPACE>
+
+
+
+# Create corresponding roles for each resource
+
+CreateRole:Name=%DB_<COMPONENT_NAMESPACE>-SOURCE,Resources=%DB_<COMPONENT_NAMESPACE>-SOURCE:RW
+
+CreateRole:Name=%DB_<COMPONENT_NAMESPACE>-DATA,Resources=%DB_<COMPONENT_NAMESPACE>-DATA:RW
+
+CreateRole:Name=%DB_<COMPONENT_NAMESPACE>,Resources=%DB_<COMPONENT_NAMESPACE>:RW
+
+CreateRole:Name=%HS_DB_<COMPONENT_NAMESPACE>,Resources=%DB_<COMPONENT_NAMESPACE>:RW,%DB_<COMPONENT_NAMESPACE>-DATA:RW,%DB_<COMPONENT_NAMESPACE>-SOURCE:RW
+
+
+
+# Create global and source code databases for the component namespace
+
+CreateDatabase:Name=<COMPONENT_NAMESPACE>-DATA,Directory=<AIA_INSTANCE_DIR>/mgr/<COMPONENT_NAMESPACE_LOWER>-data,Resource=%DB_<COMPONENT_NAMESPACE>-DATA
+
+CreateDatabase:Name=<COMPONENT_NAMESPACE>-SOURCE,Directory=<AIA_INSTANCE_DIR>/mgr/<COMPONENT_NAMESPACE_LOWER>-source,Resource=%DB_<COMPONENT_NAMESPACE>-SOURCE
+
+
+
+# Create component namespace
+
+CreateNamespace:Name=<COMPONENT_NAMESPACE>,Globals=<COMPONENT_NAMESPACE>-DATA,Routines=<COMPONENT_NAMESPACE>-SOURCE,Interop=0
+
+
+
+# Create ensemble package mappings to the component namespace - this is required for code to load and compile in the following step
+
+Execute:Namespace="<COMPONENT_NAMESPACE>",ClassName="%EnsembleMgr",MethodName="map2enslib",Arg1="<COMPONENT_NAMESPACE>",Arg2="1"
+
+
+
+# Install module into the component namespace using local tarball
+
+Execute:Namespace="<COMPONENT_NAMESPACE>",ClassName="%IPM.Main",MethodName="Shell",Arg1="load <IPM_MODULE_ARTIFACT_FILE_PATH> -verbose -DNoLock=1 -DNoTransaction=1 -DNoMapping=1 -synchronous"
+
+
+
+# Add package/routine mapping to HSSYS to support auth and config code
+
+CreateMapPackage:Namespace="HSSYS",Name="HS.HC.SystemConfig",Database=<COMPONENT_NAMESPACE>-SOURCE
+
+CreateMapPackage:Namespace="HSSYS",Name="HS.ClientAPI",Database=<COMPONENT_NAMESPACE>-SOURCE
+
+CreateMapPackage:Namespace="HSSYS",Name="HS.HC.ClientAPI",Database=<COMPONENT_NAMESPACE>-SOURCE
+
+CreateMapPackage:Namespace="HSSYS",Name="HS.OAuth2",Database=<COMPONENT_NAMESPACE>-SOURCE
+
+CreateMapPackage:Namespace="HSSYS",Name="HS.Registry",Database=<COMPONENT_NAMESPACE>-SOURCE
+
+CreateMapPackage:Namespace="HSSYS",Name="HS.Auth.Client.Custom",Database=<COMPONENT_NAMESPACE>-SOURCE
+
+
+
+# Add global mapping to HSSYS to access service registry in component namespace
+
+CreateMapGlobal:Namespace="HSSYS",Name="HS.Registry.Service.*",Database=<COMPONENT_NAMESPACE>-DATA
+
+
+
+# Add global mapping to HSSYS for localized error messages
+
+CreateMapGlobal:Namespace="HSSYS",Name="IRIS.Msg("ZHSOAuth2Err")",Database=<COMPONENT_NAMESPACE>-SOURCE
+
+CreateMapGlobal:Namespace="HSSYS",Name="IRIS.MsgNames("ZHSOAuth2Err")",Database=<COMPONENT_NAMESPACE>-SOURCE
+
+CreateMapGlobal:Namespace="HSSYS",Name="IRIS.Msg("ZHSUniversalLoginErr")",Database=<COMPONENT_NAMESPACE>-SOURCE
+
+CreateMapGlobal:Namespace="HSSYS",Name="IRIS.MsgNames("ZHSUniversalLoginErr")",Database=<COMPONENT_NAMESPACE>-SOURCE
+
+
+
+# Map ZAUTHENTICATE for OAuth2
+
+CreateMapRoutine:Namespace="%SYS",Name=ZAUTHENTICATE,Database=<COMPONENT_NAMESPACE>-SOURCE
+
+
+
+# Create package mapping to HSCUSTOM for HS.Auth.Client.Custom.ZAUTHENTICATE such that HS.Local.ZAUTHENTICATE.cls can be compiled in next step being loaded to HSCUSTOM
+
+CreateMapPackage:Namespace="HSCUSTOM",Name="HS.Auth.Client.Custom",Database=<COMPONENT_NAMESPACE>-SOURCE
+
+
+
+# Load HS.Local.ZAUTHENTICATE.cls into HSCUSTOM database
+
+Execute:Namespace="HSCUSTOM",ClassName="%SYSTEM.OBJ",MethodName="Import",Arg1="<HS_LOCAL_ZAUTHENTICATE_FILE_PATH>",Arg2="ck"
+
+
+
+# Create package mapping from HSCUSTOM to component namespace such that application can get HS.Local.ZAUTHENTICATE.cls
+
+# This is because customer will be changing HS.Local.ZAUTHENTICATE.cls in HSCUSTOM only and that's surviving the upgrade
+
+CreateMapPackage:Namespace="<COMPONENT_NAMESPACE>",Name="HS.Local",Database=HSCUSTOM
+
+
+
+# Run component specific configurations - this is typically installer code
+
+Execute:Namespace="<COMPONENT_NAMESPACE>",ClassName="%IPM.Main",MethodName="Shell",Arg1="healthshare_ai_assistant SetUpComponent -verbose"
+
+
+
+# Run implementation configurations with customer provided values
+
+Execute:Namespace="<COMPONENT_NAMESPACE>",ClassName="%IPM.Main",MethodName="Shell",Arg1="healthshare_ai_assistant ApplyUserDefinedConfiguration -verbose -env <RUNTIME_CONFIG_JSON_FILE_PATH>"
+

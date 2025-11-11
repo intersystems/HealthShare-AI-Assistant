@@ -1,0 +1,98 @@
+{
+    "healthshare_ai_assistant": {
+        "interopCredentials": [
+            {
+                "identifier": "HS_Services",
+                "userName": "HS_Services",
+                "password": "HS_Services"
+            }
+        ],
+        "sslConfigs": [
+            {
+                "name": "HS.Secure.Demo",
+                "description": "For secure connection among HealthShare components",
+                "verifyPeer": true,
+                "certificateFile": "/home/AutoAll/certs/active.crt",
+                "caFile": "/home/AutoAll/certs/ca.crt",
+                "privateKeyFile": "/home/AutoAll/certs/active.key",
+                "privateKeyType": "RSA",
+                "privateKeyPassword": "",
+                "tlsMaxVersion": "TLSv1.3",
+                "tlsMinVersion": "TLSv1.2",
+                "cipherList": "ALL:!aNULL:!eNULL:!EXP:!SSLv2",
+                "cipherSuites": "TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256",
+                "ocsp": false
+            },
+            {
+                "name": "HS.OAuth.SSLConfig",
+                "description": "SSL Configuration Name used throughout HealthShare",
+                "verifyPeer": false,
+                "privateKeyType": "RSA",
+                "tlsMaxVersion": "TLSv1.3",
+                "tlsMinVersion": "TLSv1.2",
+                "cipherList": "ALL:!aNULL:!eNULL:!EXP:!SSLv2",
+                "cipherSuites": "TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256"
+            }
+        ],
+        "httpServices": [
+            {
+                "name": "HSREGISTRY",
+                "host": "<UCR_FQDN>",
+                "sslConfig": "HS.Secure.Demo",
+                "url": "/<UCR_INSTANCE_NAME_LOWER>/api/healthshare-rest/hsregistry",
+                "httpCredentialsConfig": "HS_Services"
+            },
+            {
+                "name": "<UCR_FQDN>:HSACCESS",
+                "host": "<UCR_FQDN>",
+                "sslConfig": "HS.Secure.Demo",
+                "url": "/<UCR_INSTANCE_NAME_LOWER>/api/healthshare-rest/hsaccess",
+                "httpCredentialsConfig": "HS_Services",
+                "isDefaultAccessGateway": true
+            },
+            {
+                "name": "NavFrameRESTPrimary",
+                "host": "<UCR_FQDN>",
+                "sslConfig": "HS.Secure.Demo",
+                "url": "/<UCR_INSTANCE_NAME_LOWER>/api/healthshare-rest/hssys",
+                "httpCredentialsConfig": "HS_Services"
+            },
+            {
+                "name": "PatientBannerRESTServiceKey",
+                "host": "<UCR_FQDN>",
+                "sslConfig": "HS.Secure.Demo",
+                "url": "/<UCR_INSTANCE_NAME_LOWER>/api/healthshare-rest/hssys",
+                "httpCredentialsConfig": "HS_Services"
+            },            
+            {
+                "name": "OAuth2.Issuer",
+                "host": "<UCR_FQDN>",
+                "sslConfig": "HS.OAuth.SSLConfig",
+                "url": "/<UCR_INSTANCE_NAME_LOWER>/oauth2"
+            }
+        ],
+        "soapServices": [
+            {
+                "name": "HSREGISTRY",
+                "host": "<UCR_FQDN>",
+                "sslConfig": "HS.Secure.Demo",
+                "url": "/<UCR_INSTANCE_NAME_LOWER>/csp/healthshare/hsregistry/services/HS.Hub.HSWS.WebServices.cls",
+                "usernameTokenProfileConfig": "HS_Services"
+            },
+            {
+                "name": "<UCR_FQDN>:HSACCESS",
+                "host": "<UCR_FQDN>",
+                "sslConfig": "HS.Secure.Demo",
+                "url": "/<UCR_INSTANCE_NAME_LOWER>/csp/healthshare/hsaccess/services/HS.Gateway.Access.WebServices.cls",
+                "usernameTokenProfileConfig": "HS_Services"
+            },
+            {
+                "name": "HSAudit.Repository",
+                "host": "<UCR_FQDN>",
+                "sslConfig": "HS.Secure.Demo",
+                "url": "/<UCR_INSTANCE_NAME_LOWER>/csp/healthshare/hsregistry/services/HS.Audit.Common.WebServices.cls",
+                "usernameTokenProfileConfig": "HS_Services"
+            }            
+        ]        
+    }
+}
