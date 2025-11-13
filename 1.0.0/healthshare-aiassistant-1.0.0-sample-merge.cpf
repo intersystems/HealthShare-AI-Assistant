@@ -8,101 +8,103 @@ ModifySystem:Name=SYSTEM,AutheEnabled=33564655
 
 # Create resources for COMPONENT_NAMESPACE
 
-CreateResource:Name=%DB_<COMPONENT_NAMESPACE>-SOURCE,Description=The <COMPONENT_NAMESPACE>-SOURCE database
+CreateResource:Name=%DB_<MODULE-NAMESPACE-UPPERCASE>-SOURCE,Description=The <MODULE-NAMESPACE-UPPERCASE>-SOURCE database
 
-CreateResource:Name=%DB_<COMPONENT_NAMESPACE>-DATA,Description=The <COMPONENT_NAMESPACE>-DATA database
+CreateResource:Name=%DB_<MODULE-NAMESPACE-UPPERCASE>-DATA,Description=The <MODULE-NAMESPACE-UPPERCASE>-DATA database
 
-CreateResource:Name=%DB_<COMPONENT_NAMESPACE>,Description=<COMPONENT_NAMESPACE>
+CreateResource:Name=%DB_<MODULE-NAMESPACE-UPPERCASE>,Description=<MODULE-NAMESPACE-UPPERCASE>
 
 
 
 # Create corresponding roles for each resource
 
-CreateRole:Name=%DB_<COMPONENT_NAMESPACE>-SOURCE,Resources=%DB_<COMPONENT_NAMESPACE>-SOURCE:RW
+CreateRole:Name=%DB_<MODULE-NAMESPACE-UPPERCASE>-SOURCE,Resources=%DB_<MODULE-NAMESPACE-UPPERCASE>-SOURCE:RW
 
-CreateRole:Name=%DB_<COMPONENT_NAMESPACE>-DATA,Resources=%DB_<COMPONENT_NAMESPACE>-DATA:RW
+CreateRole:Name=%DB_<MODULE-NAMESPACE-UPPERCASE>-DATA,Resources=%DB_<MODULE-NAMESPACE-UPPERCASE>-DATA:RW
 
-CreateRole:Name=%DB_<COMPONENT_NAMESPACE>,Resources=%DB_<COMPONENT_NAMESPACE>:RW
+CreateRole:Name=%DB_<MODULE-NAMESPACE-UPPERCASE>,Resources=%DB_<MODULE-NAMESPACE-UPPERCASE>:RW
 
-CreateRole:Name=%HS_DB_<COMPONENT_NAMESPACE>,Resources=%DB_<COMPONENT_NAMESPACE>:RW,%DB_<COMPONENT_NAMESPACE>-DATA:RW,%DB_<COMPONENT_NAMESPACE>-SOURCE:RW
+CreateRole:Name=%HS_DB_<MODULE-NAMESPACE-UPPERCASE>,Resources=%DB_<MODULE-NAMESPACE-UPPERCASE>:RW,%DB_<MODULE-NAMESPACE-UPPERCASE>-DATA:RW,%DB_<MODULE-NAMESPACE-UPPERCASE>-SOURCE:RW
 
 
 
 # Create global and source code databases for the component namespace
 
-CreateDatabase:Name=<COMPONENT_NAMESPACE>-DATA,Directory=<AIA_INSTANCE_DIR>/mgr/<COMPONENT_NAMESPACE_LOWER>-data,Resource=%DB_<COMPONENT_NAMESPACE>-DATA
+CreateDatabase:Name=<MODULE-NAMESPACE-UPPERCASE>-DATA,Directory=<instance-install-directory>/mgr/<module-namespace-lowercase>-data,Resource=%DB_<MODULE-NAMESPACE-UPPERCASE>-DATA
 
-CreateDatabase:Name=<COMPONENT_NAMESPACE>-SOURCE,Directory=<AIA_INSTANCE_DIR>/mgr/<COMPONENT_NAMESPACE_LOWER>-source,Resource=%DB_<COMPONENT_NAMESPACE>-SOURCE
+CreateDatabase:Name=<MODULE-NAMESPACE-UPPERCASE>-SOURCE,Directory=<instance-install-directory>/mgr/<module-namespace-lowercase>-source,Resource=%DB_<MODULE-NAMESPACE-UPPERCASE>-SOURCE
 
 
 
 # Create component namespace
 
-CreateNamespace:Name=<COMPONENT_NAMESPACE>,Globals=<COMPONENT_NAMESPACE>-DATA,Routines=<COMPONENT_NAMESPACE>-SOURCE,Interop=0
+CreateNamespace:Name=<MODULE-NAMESPACE-UPPERCASE>,Globals=<MODULE-NAMESPACE-UPPERCASE>-DATA,Routines=<MODULE-NAMESPACE-UPPERCASE>-SOURCE,Interop=0
 
 
 
 # Create ensemble package mappings to the component namespace - this is required for code to load and compile in the following step
 
-Execute:Namespace="<COMPONENT_NAMESPACE>",ClassName="%EnsembleMgr",MethodName="map2enslib",Arg1="<COMPONENT_NAMESPACE>",Arg2="1"
+Execute:Namespace="<MODULE-NAMESPACE-UPPERCASE>",ClassName="%EnsembleMgr",MethodName="map2enslib",Arg1="<MODULE-NAMESPACE-UPPERCASE>",Arg2="1"
 
 
 
 # Install module into the component namespace using local tarball
 
-Execute:Namespace="<COMPONENT_NAMESPACE>",ClassName="%IPM.Main",MethodName="Shell",Arg1="load <IPM_MODULE_ARTIFACT_FILE_PATH> -verbose -DNoLock=1 -DNoTransaction=1 -DNoMapping=1 -synchronous"
+Execute:Namespace="<MODULE-NAMESPACE-UPPERCASE>",ClassName="%IPM.Main",MethodName="Shell",Arg1="load <path-and-filename-of-module-artifact> -verbose -DNoLock=1 -DNoTransaction=1 -DNoMapping=1 -synchronous"
 
 
 
 # Add package/routine mapping to HSSYS to support auth and config code
 
-CreateMapPackage:Namespace="HSSYS",Name="HS.HC.SystemConfig",Database=<COMPONENT_NAMESPACE>-SOURCE
+CreateMapPackage:Namespace="HSSYS",Name="HS.HC.SystemConfig",Database=<MODULE-NAMESPACE-UPPERCASE>-SOURCE
 
-CreateMapPackage:Namespace="HSSYS",Name="HS.ClientAPI",Database=<COMPONENT_NAMESPACE>-SOURCE
+CreateMapPackage:Namespace="HSSYS",Name="HS.ClientAPI",Database=<MODULE-NAMESPACE-UPPERCASE>-SOURCE
 
-CreateMapPackage:Namespace="HSSYS",Name="HS.HC.ClientAPI",Database=<COMPONENT_NAMESPACE>-SOURCE
+CreateMapPackage:Namespace="HSSYS",Name="HS.HC.ClientAPI",Database=<MODULE-NAMESPACE-UPPERCASE>-SOURCE
 
-CreateMapPackage:Namespace="HSSYS",Name="HS.OAuth2",Database=<COMPONENT_NAMESPACE>-SOURCE
+CreateMapPackage:Namespace="HSSYS",Name="HS.OAuth2",Database=<MODULE-NAMESPACE-UPPERCASE>-SOURCE
 
-CreateMapPackage:Namespace="HSSYS",Name="HS.Registry",Database=<COMPONENT_NAMESPACE>-SOURCE
+CreateMapPackage:Namespace="HSSYS",Name="HS.Registry",Database=<MODULE-NAMESPACE-UPPERCASE>-SOURCE
 
-CreateMapPackage:Namespace="HSSYS",Name="HS.Auth.Client.Custom",Database=<COMPONENT_NAMESPACE>-SOURCE
+CreateMapPackage:Namespace="HSSYS",Name="HS.Auth.Client.Custom",Database=<MODULE-NAMESPACE-UPPERCASE>-SOURCE
+
+CreateMapPackage:Namespace="HSSYS",Name="HSMOD.SAML.Common",Database=<MODULE-NAMESPACE-UPPERCASE>-SOURCE
 
 
 
 # Add global mapping to HSSYS to access service registry in component namespace
 
-CreateMapGlobal:Namespace="HSSYS",Name="HS.Registry.Service.*",Database=<COMPONENT_NAMESPACE>-DATA
+CreateMapGlobal:Namespace="HSSYS",Name="HS.Registry.Service.*",Database=<MODULE-NAMESPACE-UPPERCASE>-DATA
 
 
 
 # Add global mapping to HSSYS for localized error messages
 
-CreateMapGlobal:Namespace="HSSYS",Name="IRIS.Msg("ZHSOAuth2Err")",Database=<COMPONENT_NAMESPACE>-SOURCE
+CreateMapGlobal:Namespace="HSSYS",Name="IRIS.Msg("ZHSOAuth2Err")",Database=<MODULE-NAMESPACE-UPPERCASE>-SOURCE
 
-CreateMapGlobal:Namespace="HSSYS",Name="IRIS.MsgNames("ZHSOAuth2Err")",Database=<COMPONENT_NAMESPACE>-SOURCE
+CreateMapGlobal:Namespace="HSSYS",Name="IRIS.MsgNames("ZHSOAuth2Err")",Database=<MODULE-NAMESPACE-UPPERCASE>-SOURCE
 
-CreateMapGlobal:Namespace="HSSYS",Name="IRIS.Msg("ZHSUniversalLoginErr")",Database=<COMPONENT_NAMESPACE>-SOURCE
+CreateMapGlobal:Namespace="HSSYS",Name="IRIS.Msg("ZHSUniversalLoginErr")",Database=<MODULE-NAMESPACE-UPPERCASE>-SOURCE
 
-CreateMapGlobal:Namespace="HSSYS",Name="IRIS.MsgNames("ZHSUniversalLoginErr")",Database=<COMPONENT_NAMESPACE>-SOURCE
+CreateMapGlobal:Namespace="HSSYS",Name="IRIS.MsgNames("ZHSUniversalLoginErr")",Database=<MODULE-NAMESPACE-UPPERCASE>-SOURCE
 
 
 
 # Map ZAUTHENTICATE for OAuth2
 
-CreateMapRoutine:Namespace="%SYS",Name=ZAUTHENTICATE,Database=<COMPONENT_NAMESPACE>-SOURCE
+CreateMapRoutine:Namespace="%SYS",Name=ZAUTHENTICATE,Database=<MODULE-NAMESPACE-UPPERCASE>-SOURCE
 
 
 
 # Create package mapping to HSCUSTOM for HS.Auth.Client.Custom.ZAUTHENTICATE such that HS.Local.ZAUTHENTICATE.cls can be compiled in next step being loaded to HSCUSTOM
 
-CreateMapPackage:Namespace="HSCUSTOM",Name="HS.Auth.Client.Custom",Database=<COMPONENT_NAMESPACE>-SOURCE
+CreateMapPackage:Namespace="HSCUSTOM",Name="HS.Auth.Client.Custom",Database=<MODULE-NAMESPACE-UPPERCASE>-SOURCE
 
 
 
 # Load HS.Local.ZAUTHENTICATE.cls into HSCUSTOM database
 
-Execute:Namespace="HSCUSTOM",ClassName="%SYSTEM.OBJ",MethodName="Import",Arg1="<HS_LOCAL_ZAUTHENTICATE_FILE_PATH>",Arg2="ck"
+Execute:Namespace="HSCUSTOM",ClassName="%SYSTEM.OBJ",MethodName="Import",Arg1="<path-and-filename-of-hs-local-zauthenticate>",Arg2="ck"
 
 
 
@@ -110,17 +112,17 @@ Execute:Namespace="HSCUSTOM",ClassName="%SYSTEM.OBJ",MethodName="Import",Arg1="<
 
 # This is because customer will be changing HS.Local.ZAUTHENTICATE.cls in HSCUSTOM only and that's surviving the upgrade
 
-CreateMapPackage:Namespace="<COMPONENT_NAMESPACE>",Name="HS.Local",Database=HSCUSTOM
+CreateMapPackage:Namespace="<MODULE-NAMESPACE-UPPERCASE>",Name="HS.Local",Database=HSCUSTOM
 
 
 
 # Run component specific configurations - this is typically installer code
 
-Execute:Namespace="<COMPONENT_NAMESPACE>",ClassName="%IPM.Main",MethodName="Shell",Arg1="healthshare_ai_assistant SetUpComponent -verbose"
+Execute:Namespace="<MODULE-NAMESPACE-UPPERCASE>",ClassName="%IPM.Main",MethodName="Shell",Arg1="healthshare_ai_assistant SetUpComponent -verbose"
 
 
 
 # Run implementation configurations with customer provided values
 
-Execute:Namespace="<COMPONENT_NAMESPACE>",ClassName="%IPM.Main",MethodName="Shell",Arg1="healthshare_ai_assistant ApplyUserDefinedConfiguration -verbose -env <RUNTIME_CONFIG_JSON_FILE_PATH>"
+Execute:Namespace="<MODULE-NAMESPACE-UPPERCASE>",ClassName="%IPM.Main",MethodName="Shell",Arg1="healthshare_ai_assistant ApplyUserDefinedConfiguration -verbose -env <path-and-filename-of-json-config>"
 

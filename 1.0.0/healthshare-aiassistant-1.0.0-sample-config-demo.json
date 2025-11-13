@@ -16,12 +16,8 @@
                 "caFile": "/home/AutoAll/certs/ca.crt",
                 "privateKeyFile": "/home/AutoAll/certs/active.key",
                 "privateKeyType": "RSA",
-                "privateKeyPassword": "",
                 "tlsMaxVersion": "TLSv1.3",
-                "tlsMinVersion": "TLSv1.2",
-                "cipherList": "ALL:!aNULL:!eNULL:!EXP:!SSLv2",
-                "cipherSuites": "TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256",
-                "ocsp": false
+                "tlsMinVersion": "TLSv1.2"
             },
             {
                 "name": "HS.OAuth.SSLConfig",
@@ -29,68 +25,66 @@
                 "verifyPeer": false,
                 "privateKeyType": "RSA",
                 "tlsMaxVersion": "TLSv1.3",
-                "tlsMinVersion": "TLSv1.2",
-                "cipherList": "ALL:!aNULL:!eNULL:!EXP:!SSLv2",
-                "cipherSuites": "TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256"
+                "tlsMinVersion": "TLSv1.2"
             }
         ],
         "httpServices": [
             {
                 "name": "HSREGISTRY",
-                "host": "<UCR_FQDN>",
+                "host": "sample.host.com",
                 "sslConfig": "HS.Secure.Demo",
-                "url": "/<UCR_INSTANCE_NAME_LOWER>/api/healthshare-rest/hsregistry",
+                "url": "/ucr_instance/api/healthshare-rest/hsregistry",
                 "httpCredentialsConfig": "HS_Services"
             },
             {
-                "name": "<UCR_FQDN>:HSACCESS",
-                "host": "<UCR_FQDN>",
+                "name": "sample.host.com:HSACCESS",
+                "host": "sample.host.com",
                 "sslConfig": "HS.Secure.Demo",
-                "url": "/<UCR_INSTANCE_NAME_LOWER>/api/healthshare-rest/hsaccess",
+                "url": "/ucr_instance/api/healthshare-rest/hsaccess",
                 "httpCredentialsConfig": "HS_Services",
                 "isDefaultAccessGateway": true
             },
             {
                 "name": "NavFrameRESTPrimary",
-                "host": "<UCR_FQDN>",
+                "host": "sample.host.com",
                 "sslConfig": "HS.Secure.Demo",
-                "url": "/<UCR_INSTANCE_NAME_LOWER>/api/healthshare-rest/hssys",
+                "url": "/ucr_instance/api/healthshare-rest/hssys",
                 "httpCredentialsConfig": "HS_Services"
             },
             {
                 "name": "PatientBannerRESTServiceKey",
-                "host": "<UCR_FQDN>",
+                "host": "sample.host.com",
                 "sslConfig": "HS.Secure.Demo",
-                "url": "/<UCR_INSTANCE_NAME_LOWER>/api/healthshare-rest/hssys",
+                "url": "/ucr_instance/api/healthshare-rest/hssys",
                 "httpCredentialsConfig": "HS_Services"
             },            
             {
                 "name": "OAuth2.Issuer",
-                "host": "<UCR_FQDN>",
+                "host": "sample.host.com",
                 "sslConfig": "HS.OAuth.SSLConfig",
-                "url": "/<UCR_INSTANCE_NAME_LOWER>/oauth2"
+                "url": "/ucr_instance/oauth2"
             }
         ],
         "soapServices": [
             {
                 "name": "HSREGISTRY",
-                "host": "<UCR_FQDN>",
+                "host": "sample.host.com",
                 "sslConfig": "HS.Secure.Demo",
-                "url": "/<UCR_INSTANCE_NAME_LOWER>/csp/healthshare/hsregistry/services/HS.Hub.HSWS.WebServices.cls",
+                "url": "/ucr_instance/csp/healthshare/hsregistry/services/HS.Hub.HSWS.WebServices.cls",
                 "usernameTokenProfileConfig": "HS_Services"
             },
             {
-                "name": "<UCR_FQDN>:HSACCESS",
-                "host": "<UCR_FQDN>",
+                "name": "sample.host.com:HSACCESS",
+                "host": "sample.host.com",
                 "sslConfig": "HS.Secure.Demo",
-                "url": "/<UCR_INSTANCE_NAME_LOWER>/csp/healthshare/hsaccess/services/HS.Gateway.Access.WebServices.cls",
+                "url": "/ucr_instance/csp/healthshare/hsaccess/services/HS.Gateway.Access.WebServices.cls",
                 "usernameTokenProfileConfig": "HS_Services"
             },
             {
                 "name": "HSAudit.Repository",
-                "host": "<UCR_FQDN>",
+                "host": "sample.host.com",
                 "sslConfig": "HS.Secure.Demo",
-                "url": "/<UCR_INSTANCE_NAME_LOWER>/csp/healthshare/hsregistry/services/HS.Audit.Common.WebServices.cls",
+                "url": "/ucr_instance/csp/healthshare/hsregistry/services/HS.Audit.Common.WebServices.cls",
                 "usernameTokenProfileConfig": "HS_Services"
             }            
         ]        
