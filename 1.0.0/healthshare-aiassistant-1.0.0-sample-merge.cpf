@@ -126,3 +126,9 @@ Execute:Namespace="<MODULE-NAMESPACE-UPPERCASE>",ClassName="%IPM.Main",MethodNam
 
 Execute:Namespace="<MODULE-NAMESPACE-UPPERCASE>",ClassName="%IPM.Main",MethodName="Shell",Arg1="healthshare_ai_assistant ApplyUserDefinedConfiguration -verbose -env <path-and-filename-of-json-config>"
 
+
+
+# (ONLY required if UCR version <= 24.2) Add a config entry to enable OAuth login
+
+Execute:Namespace="HSSYS",ClassName="HS.Registry.Config",MethodName="AddNewKey",Arg1="\SSO\OAuthLoginEnabled",Arg2=1
+
