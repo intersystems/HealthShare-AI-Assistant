@@ -4,7 +4,7 @@
             {
                 "identifier": "HS_Services",
                 "userName": "HS_Services",
-                "password": "<hs-services-password>"
+                "password": "HS_Services"
             }
         ],
         "sslConfigs": [
@@ -32,60 +32,68 @@
             {
                 "name": "<REGISTRY-NAMESPACE-UPPERCASE>",
                 "host": "<ucr-fully-qualified-domain-name>",
+                "port": "<port-if-not-443>",
                 "sslConfig": "<ssl-config-name>",
-                "url": "/<ucr-instance-name-lowercase>/api/healthshare-rest/<registry-namespace-lowercase>",
-                "httpCredentialsConfig": "<hs-services-identifier>"
+                "url": "/<ucr-web-server-prefix-if-configured>/api/healthshare-rest/<registry-namespace-lowercase>",
+                "httpCredentialsConfig": "HS_Services"
             },
             {
                 "name": "<ucr-fully-qualified-domain-name>:<ACCESS-GATEWAY-NAMESPACE-UPPERCASE>",
                 "host": "<ucr-fully-qualified-domain-name>",
+                "port": "<port-if-not-443>",
                 "sslConfig": "<ssl-config-name>",
-                "url": "/<ucr-instance-name-lowercase>/api/healthshare-rest/<access-gateway-namespace-lowercase>",
-                "httpCredentialsConfig": "<hs-services-identifier>",
+                "url": "/<ucr-web-server-prefix-if-configured>/api/healthshare-rest/<access-gateway-namespace-lowercase>",
+                "httpCredentialsConfig": "HS_Services",
                 "isDefaultAccessGateway": true
             },
             {
                 "name": "NavFrameRESTPrimary",
                 "host": "<ucr-fully-qualified-domain-name>",
+                "port": "<port-if-not-443>",
                 "sslConfig": "<ssl-config-name>",
-                "url": "/<ucr-instance-name-lowercase>/api/healthshare-rest/hssys",
-                "httpCredentialsConfig": "<hs-services-identifier>"
+                "url": "/<ucr-web-server-prefix-if-configured>/api/healthshare-rest/hssys",
+                "httpCredentialsConfig": "HS_Services"
             },
             {
                 "name": "PatientBannerRESTServiceKey",
                 "host": "<ucr-fully-qualified-domain-name>",
+                "port": "<port-if-not-443>",
                 "sslConfig": "<ssl-config-name>",
-                "url": "/<ucr-instance-name-lowercase>/api/healthshare-rest/hssys",
-                "httpCredentialsConfig": "<hs-services-identifier>"
+                "url": "/<ucr-web-server-prefix-if-configured>/api/healthshare-rest/hssys",
+                "httpCredentialsConfig": "HS_Services"
             },            
             {
                 "name": "OAuth2.Issuer",
                 "host": "<ucr-fully-qualified-domain-name>",
+                "port": "<port-if-not-443>",
                 "sslConfig": "HS.OAuth.SSLConfig",
-                "url": "/<ucr-instance-name-lowercase>/oauth2"
+                "url": "/<ucr-web-server-prefix-if-configured>/oauth2"
             }
         ],
         "soapServices": [
             {
                 "name": "<REGISTRY-NAMESPACE-UPPERCASE>",
                 "host": "<ucr-fully-qualified-domain-name>",
+                "port": "<port-if-not-443>",
                 "sslConfig": "<ssl-config-name>",
-                "url": "/<ucr-instance-name-lowercase>/csp/healthshare/<registry-namespace-lowercase>/services/HS.Hub.HSWS.WebServices.cls",
-                "usernameTokenProfileConfig": "<hs-services-identifier>"
+                "url": "/<ucr-web-server-prefix-if-configured>/csp/healthshare/<registry-namespace-lowercase>/services/HS.Hub.HSWS.WebServices.cls",
+                "usernameTokenProfileConfig": "HS_Services"
             },
             {
                 "name": "<ucr-fully-qualified-domain-name>:<ACCESS-GATEWAY-NAMESPACE-UPPERCASE>",
                 "host": "<ucr-fully-qualified-domain-name>",
+                "port": "<port-if-not-443>",
                 "sslConfig": "<ssl-config-name>",
-                "url": "/<ucr-instance-name-lowercase>/csp/healthshare/<access-gateway-namespace-lowercase>/services/HS.Gateway.Access.WebServices.cls",
-                "usernameTokenProfileConfig": "<hs-services-identifier>"
+                "url": "/<ucr-web-server-prefix-if-configured>/csp/healthshare/<access-gateway-namespace-lowercase>/services/HS.Gateway.Access.WebServices.cls",
+                "usernameTokenProfileConfig": "HS_Services"
             },
             {
                 "name": "HSAudit.Repository",
                 "host": "<ucr-fully-qualified-domain-name>",
+                "port": "<port-if-not-443>",
                 "sslConfig": "<ssl-config-name>",
-                "url": "/<ucr-instance-name-lowercase>/csp/healthshare/<registry-namespace-lowercase>/services/HS.Audit.Common.WebServices.cls",
-                "usernameTokenProfileConfig": "<hs-services-identifier>"
+                "url": "/<ucr-web-server-prefix-if-configured>/csp/healthshare/<registry-namespace-lowercase>/services/HS.Audit.Common.WebServices.cls",
+                "usernameTokenProfileConfig": "HS_Services"
             }            
         ]        
     }
