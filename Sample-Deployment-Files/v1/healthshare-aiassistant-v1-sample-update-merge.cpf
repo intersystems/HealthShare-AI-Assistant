@@ -1,0 +1,8 @@
+[Actions]
+
+# Install module into the component namespace using local tarball
+Execute:Namespace="<MODULE-NAMESPACE-UPPERCASE>",ClassName="%IPM.Main",MethodName="Shell",Arg1="load <path-and-filename-of-module-artifact> -verbose -DNoLock=1 -DNoTransaction=1 -DNoMapping=1 -synchronous"
+
+# Run module specific configurations - this is typically installer code
+Execute:Namespace="<MODULE-NAMESPACE-UPPERCASE>",ClassName="%IPM.Main",MethodName="Shell",Arg1="healthshare_ai_assistant UpgradeComponent -verbose"
+
